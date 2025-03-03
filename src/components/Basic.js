@@ -5,6 +5,7 @@ import { IoMdSend } from "react-icons/io";
 import { BiBot, BiUser } from "react-icons/bi";
 
 function Basic() {
+  const hostName = window.location.hostname
   // Состояние для хранения истории чата
   const [chat, setChat] = useState([]);
   // Состояние для хранения введенного пользователем сообщения
@@ -30,15 +31,15 @@ function Basic() {
       setChat((chat) => [...chat, request_temp]);
       setbotTyping(true); // Устанавливаем состояние "бот печатает"
       setInputMessage(""); // Очищаем поле ввода
-      rasaAPI(name, inputMessage); // Вызываем функцию для отправки сообщения на сервер Rasa
+      rasaAPI(name, inputMessage, hostName); // Вызываем функцию для отправки сообщения на сервер Rasa
     } else {
       window.alert("Please enter valid message"); // Предупреждение, если сообщение пустое
     }
   };
 
   // Функция для отправки сообщения на сервер Rasa и получения ответа
-  const rasaAPI = async function handleClick(name, msg) {
-    await fetch("http://localhost:5005/webhooks/rest/webhook", {
+  const rasaAPI = async function handleClick(name, msg, hostName) {
+    await fetch(`http://${hostName}:5005/webhooks/rest/webhook`, {
       method: "POST",
       headers: {
         Accept: "application/json",
